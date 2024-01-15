@@ -29,7 +29,7 @@ def home():
     cursor.execute("""
                     SELECT * FROM `cash`
                    """)
-    # 現金更動紀錄 
+    # 現金更動紀錄  
     cash_result = cursor.fetchall()
     # 計算台幣和美金總額
     taiwanese_dollars = 0
