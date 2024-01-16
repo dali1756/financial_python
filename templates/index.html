@@ -55,20 +55,56 @@
             <tbody>
                 {% for new_data in data["cash_result"] %}
                 <tr>
-                    <td>{{ new_data[0] }}</td>
-                    <td>{{ new_data[1] }}</td>
-                    <td>{{ new_data[2] }}</td>
-                    <td>{{ new_data[3] }}</td>
-                    <td>{{ new_data[4] }}</td>
+                    <td>{{ new_data[0] }}</td> <!-- ID -->
+                    <td>{{ new_data[1] }}</td> <!-- 台幣 -->
+                    <td>{{ new_data[2] }}</td> <!-- 美金 -->
+                    <td>{{ new_data[3] }}</td> <!-- 備註 -->
+                    <td>{{ new_data[4] }}</td> <!-- 時間 -->
                     <td>
-                        <button class = "btn btn-primary">刪除此筆資料</button>
+                        <form action = "cash-delete" method = "post">
+                            <!-- 針對指定id的資料進行刪除使用input type="hidden" 
+                                 value帶入上方的id欄位 -->
+                            <input type = "hidden" name = "id" value = "{{ new_data[0] }}">
+                            <button class = "btn btn-primary">刪除此筆資料</button>
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
       </div>
-
+    <hr>
+    <div id = "stock-info" style = "padding: 2rem;">
+        <h4>股票庫存</h4>
+        <table class = "table table-bordered">
+            <thead>
+                <tr>
+                    <th scope = "col">代號</th>
+                    <th scope = "col">持有數</th>
+                    <th scope = "col">股價</th>
+                    <th scope = "col">市值</th>
+                    <th scope = "col">資產佔比(%%)</th>
+                    <th scope = "col">總成本(含手續費)</th>
+                    <th scope = "col">平均成本</th>
+                    <th scope = "col">報酬率(%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for new_stock in data["stock_info"] %}
+                <tr>
+                    <td>{{ new_stock["stock_id"] }}</td>
+                    <td>{{ new_stock["shares"] }}</td>
+                    <td>{{ new_stock["current_price"] }}</td>
+                    <td>{{ new_stock["total_value"] }}</td>
+                    <td>{{ new_stock["value_percentage"] }}</td>
+                    <td>{{ new_stock["stock_cost"] }}</td>
+                    <td>{{ new_stock["average_cost"] }}</td>
+                    <td>{{ new_stock["rate_return"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 
       
