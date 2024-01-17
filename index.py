@@ -1,5 +1,5 @@
 # 要渲染html必需引入render_template,且所有html檔案都必須要放在templates資料夾內
-# g是一個物件可以用來儲存資訊
+# g是一個物件可以用來儲存資訊,確保flask應用一次請求多次資料庫時只需建立一次連接
 from flask import Flask, render_template, request, g, redirect
 from mysql.connector import Error
 import mysql.connector, requests, math
@@ -11,10 +11,10 @@ def get_db():
     if not hasattr(g, "mysql_db"):
         try:
             g.mysql_db = mysql.connector.connect(
-                host = "localhost",
-                database = "financial",
-                user = "root",
-                password = "a0928125162"
+                host = "",
+                database = "",
+                user = "",
+                password = ""
             )
         except Error as e:
             print("資料庫連線失敗.", e)
@@ -169,12 +169,12 @@ def submit_stock():
 # 刪除資料
 @app.route("/cash-delete", methods = ["post"])
 def cash_delete():
-    # 這裡的id需要和index.html中的name值相同
+    # 這裡的id需要和index.html <form>表單中的name欄位相同
     transaction_id = request.values["id"]
     conn = get_db()
     cursor = conn.cursor()
     # SQL語法後的()內容需要在結尾加上 , 因為是tup關係,不加會有bug
-    # 後方()中如果只有一個參數必需要在結尾加上 , 才不會被認為是元素而是元組tup
+    # 後方()中如果只有一個參數必需要在結尾加上 , 才不會被認為是元素而是元組tup,如是多參數可以不必在結尾加上 ,
     cursor.execute("""
                    DELETE FROM `cash` WHERE transaction_id = %s
                    """, (transaction_id,))
