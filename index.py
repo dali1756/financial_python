@@ -11,10 +11,7 @@ def get_db():
     if not hasattr(g, "mysql_db"):
         try:
             g.mysql_db = mysql.connector.connect(
-                host = "",
-                database = "",
-                user = "",
-                password = ""
+                
             )
         except Error as e:
             print("資料庫連線失敗.", e)
@@ -42,7 +39,8 @@ def home():
     r = requests.get('https://tw.rter.info/capi.php')
     currency = r.json()
     # currency["USDTWD"]["Exrate"]是api裡dic的東西,也就是key值就可以獲取即時匯率
-    total = math.floor(taiwanese_dollars + us_dollars * currency["USDTWD"]["Exrate"])
+    # total = math.floor(taiwanese_dollars + us_dollars * currency["USDTWD"]["Exrate"])
+    total = round(taiwanese_dollars + us_dollars * currency["USDTWD"]["Exrate"], 2)
     # 取得使用者儲存股票資訊
     cursor.execute("""
                    SELECT * FROM `stock`
@@ -100,7 +98,7 @@ def home():
     for stock in stock_info:
         stock["value_percentage"] = round(stock["total_value"] * 100 / total_stock_value, 2)
     data = {"total":total,
-            "currency":currency["USDTWD"]["Exrate"],
+            "currency":round(currency["USDTWD"]["Exrate"], 2),
             "ud":us_dollars,
             "td":taiwanese_dollars,
             "cash_result":cash_result,
